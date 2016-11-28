@@ -24,7 +24,6 @@ YOUTUBE_API_VERSION      = "v3"
 #Plex API Constants
 TOP_TRACKS  = 25
 TOP_ARTISTS = 10
-#PLEX_IP = '192.168.1.166'
 PLEX_IP = 'localhost'
 PLEX_PORT = os.environ['PLEXSERVERPORT']
 
