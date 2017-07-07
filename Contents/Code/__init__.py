@@ -26,8 +26,7 @@ MUSIC_BRAINZ_API_URL = 'http://musicbrainz.org/ws/2/'
 
 #Plex API Constants
 TOP_TRACKS  = 25
-TOP_ARTISTS = 10
-PLEX_IP = '192.168.1.166'
+PLEX_IP = '127.0.0.1'
 PLEX_PORT = os.environ['PLEXSERVERPORT']
 
 if 'PLEXTOKEN' in os.environ:
@@ -69,7 +68,7 @@ def MainMenu():
     return oc
 
 ####################################################################################################
-# Allow the user to select which Plex music library they want to search with
+# Search by artist name options
 #
 @route(PREFIX + '/searchartistname')
 def SearchArtistName():
@@ -292,9 +291,9 @@ def SearchArtist(artist_name = ''):
 @route(PREFIX + '/artistdetail/{url_artist_name}')
 def ArtistDetail(artist_name, url_artist_name, youtube_user=False, page_token=""):
 
-    #TODO: Need more testing of getting the youtube user from the Musicbrainz API
-    #if not youtube_user:
-    #    youtube_user = SearchArtist(url_artist_name)
+    # If calling this function and the youtube_user is false, try searching Musicbrainz for a user channel
+    if not youtube_user:
+        youtube_user = SearchArtist(url_artist_name)
 
     if youtube_user:
         try:
@@ -323,7 +322,7 @@ def ArtistDetail(artist_name, url_artist_name, youtube_user=False, page_token=""
                             thumb = image
                         ))
 
-                    if json_data['nextPageToken']:
+                    if 'nextPageToken' in json_data:
                         oc.add(NextPageObject(
                         key = Callback(ArtistDetail, artist_name = artist_name, url_artist_name = url_artist_name, youtube_user = youtube_user, page_token = json_data['nextPageToken']),
                         title = "More ..."
