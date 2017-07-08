@@ -163,7 +163,8 @@ def TopTracks():
                     video_url = "http://www.youtube.com/watch?v=" + json_data['items'][0]['id']['videoId']
                     title = json_data['items'][0]['snippet']['title']
                     summary = json_data['items'][0]['snippet']['description']
-                    image = json_data['items'][0]['snippet']['thumbnails']['medium']['url']
+                    if 'thumbnails' in json_data['items'][0]['snippet']:
+                        image = json_data['items'][0]['snippet']['thumbnails']['medium']['url']
 
                     oc.add(VideoClipObject(
                             url = video_url,
@@ -197,7 +198,8 @@ def LatestVideos(page_token = ""):
                 video_url = "http://www.youtube.com/watch?v=" + item['snippet']['resourceId']['videoId']
                 title = item['snippet']['title']
                 summary = item['snippet']['description']
-                image = item['snippet']['thumbnails']['medium']['url']
+                if 'thumbnails' in item['snippet']:
+                    image = item['snippet']['thumbnails']['medium']['url']
 
                 oc.add(VideoClipObject(
                     url = video_url,
@@ -206,7 +208,7 @@ def LatestVideos(page_token = ""):
                     thumb = image
                 ))
 
-            if json_data['nextPageToken']:
+            if 'nextPageToken' in json_data:
                 oc.add(NextPageObject(
                 key = Callback(LatestVideos, page_token = json_data['nextPageToken']),
                 title = "More ..."
@@ -313,7 +315,8 @@ def ArtistDetail(artist_name, url_artist_name, youtube_user=False, page_token=""
                         video_url = "http://www.youtube.com/watch?v=" + item['snippet']['resourceId']['videoId']
                         title = item['snippet']['title']
                         summary = item['snippet']['description']
-                        image = item['snippet']['thumbnails']['medium']['url']
+                        if 'thumbnails' in item['snippet']:
+                            image = item['snippet']['thumbnails']['medium']['url']
 
                         oc.add(VideoClipObject(
                             url = video_url,
@@ -346,7 +349,8 @@ def ArtistDetail(artist_name, url_artist_name, youtube_user=False, page_token=""
                     video_url = "http://www.youtube.com/watch?v=" + item['id']['videoId']
                     title = item['snippet']['title']
                     summary = item['snippet']['description']
-                    image = item['snippet']['thumbnails']['medium']['url']
+                    if 'thumbnails' in item['snippet']:
+                        image = item['snippet']['thumbnails']['medium']['url']
 
                     oc.add(VideoClipObject(
                         url = video_url,
@@ -355,7 +359,7 @@ def ArtistDetail(artist_name, url_artist_name, youtube_user=False, page_token=""
                         thumb = image
                        ))
 
-                if json_data['nextPageToken']:
+                if 'nextPageToken' in json_data:
                     oc.add(NextPageObject(
                         key = Callback(ArtistDetail, artist_name = artist_name, url_artist_name = url_artist_name, page_token = json_data['nextPageToken']),
                         title = "More ..."
