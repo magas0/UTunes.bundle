@@ -117,28 +117,14 @@ def LibrarySave(library_key):
             PLEX_LIBRARY = Dict['music_library']
             tracks = []
             plex_url = "https://%s:%s/library/sections/%i/all?type=10&sort=viewCount%%3Adesc&X-Plex-Container-Start=0&X-Plex-Container-Size=%i&X-Plex-Token=%s" % \
-                       (PLEX_IP, PLEX_PORT, PLEX_LIBRARY, TOP_TRACKS, PLEX_TOKEN)
+                        (PLEX_IP, PLEX_PORT, PLEX_LIBRARY, TOP_TRACKS, PLEX_TOKEN)
 
             plex_tracks = XML.ElementFromURL(plex_url).xpath("//Track")
             for track in plex_tracks:
                 tracks.append(track.get('grandparentTitle') + " - " + track.get('title'))
 
             Dict['tracks'] = tracks
-
-            #Grab the top artists from your Plex music library to send to Youtube
-            artists = []
-            plex_url = "https://%s:%s/library/sections/%i/all?type=8&sort=viewCount%%3Adesc&X-Plex-Container-Start=0&X-Plex-Container-Size=%i&X-Plex-Token=%s" % \
-                       (PLEX_IP, PLEX_PORT, PLEX_LIBRARY, TOP_ARTISTS, PLEX_TOKEN)
-
-            plex_artists = XML.ElementFromURL(plex_url).xpath("//Directory")
-            for artist in plex_artists:
-               if artist.get('title') != "Various Artists":
-                    artists.append(artist.get('title'))
-
-            Dict['artists'] = artists
-
             return MainMenu()
-
         except:
             return ObjectContainer(header="Empty", message="Cannot connect to the Plex Media Server.")
 
